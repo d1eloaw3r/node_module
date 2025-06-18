@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Заявка</title>
+  <link rel="stylesheet" href="..\public\style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h1>Форма заявки</h1>
+    <form method="POST" action="/form">
+      <input name="address" placeholder="Адрес" required>
+      <input name="phone" placeholder="Телефон" required>
+
+      <input name="license_series" placeholder="Серия ВУ" required>
+      <input name="license_number" placeholder="Номер ВУ" required>
+      <input type="date" name="license_date" required>
+
+      <select name="car_brand" required>
+        <option value="">Выберите марку</option>
+        <option value="Lada">Lada</option>
+        <option value="Toyota">Toyota</option>
+        <option value="BMW">BMW</option>
+      </select>
+
+      <select name="car_model" required>
+        <option value="">Выберите модель</option>
+        <option value="Vesta">Vesta</option>
+        <option value="Granta">Granta</option>
+        <option value="Camry">Camry</option>
+        <option value="Corolla">Corolla</option>
+        <option value="X5">X5</option>
+        <option value="3 Series">3 Series</option>
+      </select>
+
+      <label>Дата тест-драйва:</label>
+      <input type="date" name="date_test" required>
+      <label>Время:</label>
+      <input type="time" name="time_test" required>
+
+      <label>Способ оплаты:</label>
+      <select name="payment_method" required>
+        <option value="Наличные">Наличные</option>
+        <option value="Банковская карта">Банковская карта</option>
+      </select>
+
+      <label><input type="checkbox" id="agreeCheckbox"> Подтверждаю, что данные верны</label>
+      <br><br>
+      <button type="submit" id="submitBtn" disabled>Отправить заявку</button>
+    </form>
+    <a href="/dashboard">Назад</a>
+  </div>
+
+  <script>
+    const checkbox = document.getElementById('agreeCheckbox');
+    const button = document.getElementById('submitBtn');
+    checkbox.addEventListener('change', () => {
+      button.disabled = !checkbox.checked;
+    });
+  </script>
+</body>
+</html>

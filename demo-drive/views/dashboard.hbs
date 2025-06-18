@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Мои заявки</title>
+  <link rel="stylesheet" href="..\public\style.css">
+</head>
+<body>
+  <div class="form-container">
+    <h1>Личный кабинет</h1>
+    <a href="/form" class="btn">+ Новая заявка</a>
+    <h2>Ваши заявки:</h2>
+
+    {{#if apps.length}}
+      {{#each apps}}
+        <div class="app-item">
+          <p><strong>Марка:</strong> {{car_brand}}, <strong>Модель:</strong> {{car_model}}</p>
+          <p><strong>Дата:</strong> {{date_test}}, <strong>Время:</strong> {{time_test}}</p>
+          <p><strong>Статус:</strong> {{status}}</p>
+          {{#ifEquals status "отклонено"}}
+            <p><strong>Причина:</strong> {{rejection_reason}}</p>
+          {{/ifEquals}}
+        </div>
+      {{/each}}
+    {{else}}
+      <p>У вас пока нет заявок.</p>
+    {{/if}}
+
+    <a href="/logout" class="btn">Выйти</a>
+  </div>
+</body>
+</html>
