@@ -2,55 +2,73 @@
 <html>
 <head>
   <title>Заявка</title>
-  <link rel="stylesheet" href="..\public\style.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../public/style.css">
 </head>
 <body>
-  <div class="form-container">
-    <h1>Форма заявки</h1>
-    <form method="POST" action="/form">
-      <input name="address" placeholder="Адрес" required>
-      <input name="phone" placeholder="Телефон" required>
-
-      <input name="license_series" placeholder="Серия ВУ" required>
-      <input name="license_number" placeholder="Номер ВУ" required>
-      <input type="date" name="license_date" required>
-
-      <select name="car_brand" required>
-        <option value="">Выберите марку</option>
-        <option value="Lada">Lada</option>
-        <option value="Toyota">Toyota</option>
-        <option value="BMW">BMW</option>
-      </select>
-
-      <select name="car_model" required>
-        <option value="">Выберите модель</option>
-        <option value="Vesta">Vesta</option>
-        <option value="Granta">Granta</option>
-        <option value="Camry">Camry</option>
-        <option value="Corolla">Corolla</option>
-        <option value="X5">X5</option>
-        <option value="3 Series">3 Series</option>
-      </select>
-
-      <label>Дата тест-драйва:</label>
-      <input type="date" name="date_test" required>
-      <label>Время:</label>
-      <input type="time" name="time_test" required>
-
-      <label>Способ оплаты:</label>
-      <select name="payment_method" required>
-        <option value="Наличные">Наличные</option>
-        <option value="Банковская карта">Банковская карта</option>
-      </select>
-
-      <label><input type="checkbox" id="agreeCheckbox"> Подтверждаю, что данные верны</label>
-      <br><br>
-      <button type="submit" id="submitBtn" disabled>Отправить заявку</button>
-    </form>
-    <a href="/dashboard">Назад</a>
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card p-4 shadow" style="min-width:320px;max-width:500px;width:100%">
+      <h1 class="mb-4 text-center">Форма заявки</h1>
+      <form method="POST" action="/form">
+        <input class="form-control mb-2" name="address" placeholder="Адрес" required>
+        <input class="form-control mb-2" name="phone" placeholder="Телефон" required>
+        <input class="form-control mb-2" name="license_series" placeholder="Серия ВУ" required>
+        <input class="form-control mb-2" name="license_number" placeholder="Номер ВУ" required>
+        <input class="form-control mb-2" type="date" name="license_date" required>
+        <select class="form-select mb-2" id="brandSelect" required>
+          <option value="">Выберите марку</option>
+          {{#each cars}}
+            <option value="{{brand}}">{{brand}}</option>
+          {{/each}}
+        </select>
+        <select class="form-select mb-2" id="modelSelect" name="car_id" required disabled>
+          <option value="">Сначала выберите марку</option>
+        </select>
+        <label class="form-label mt-2">Дата тест-драйва:</label>
+        <input class="form-control mb-2" type="date" name="desired_date" required>
+        <label class="form-label">Время:</label>
+        <input class="form-control mb-2" type="time" name="desired_time" required>
+        <label class="form-label">Способ оплаты:</label>
+        <select class="form-select mb-2" name="payment_type" required>
+          <option value="Наличные">Наличные</option>
+          <option value="Банковская карта">Банковская карта</option>
+        </select>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="agreeCheckbox">
+          <label class="form-check-label" for="agreeCheckbox">Подтверждаю, что данные верны</label>
+        </div>
+        <button class="btn btn-success w-100" type="submit" id="submitBtn" disabled>Отправить заявку</button>
+      </form>
+      <a href="/dashboard" class="btn btn-link mt-2">Назад</a>
+    </div>
   </div>
 
   <script>
+    // Получаем список машин из Handlebars
+    const cars = [
+      {{#each cars}}
+        { id: {{id}}, brand: "{{brand}}", model: "{{model}}" },
+      {{/each}}
+    ];
+    const brandSelect = document.getElementById('brandSelect');
+    const modelSelect = document.getElementById('modelSelect');
+    brandSelect.addEventListener('change', function() {
+      const brand = this.value;
+      modelSelect.innerHTML = '<option value="">Выберите модель</option>';
+      if (!brand) {
+        modelSelect.disabled = true;
+        return;
+      }
+      const filtered = cars.filter(car => car.brand === brand);
+      filtered.forEach(car => {
+        const opt = document.createElement('option');
+        opt.value = car.id;
+        opt.textContent = car.model;
+        modelSelect.appendChild(opt);
+      });
+      modelSelect.disabled = false;
+    });
+    // Кнопка отправки
     const checkbox = document.getElementById('agreeCheckbox');
     const button = document.getElementById('submitBtn');
     checkbox.addEventListener('change', () => {

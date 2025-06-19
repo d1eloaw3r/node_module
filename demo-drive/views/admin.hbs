@@ -2,38 +2,44 @@
 <html>
 <head>
   <title>Админ-панель</title>
-  <link rel="stylesheet" href="..\public\style.css">
+  <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+  <link rel="stylesheet" href="../public/style.css">
 </head>
 <body>
-  <div class="form-container">
-    <h1>Все заявки</h1>
+  <div class="container py-4">
+    <h1 class="mb-4 text-center">Все заявки</h1>
 
     {{#if apps.length}}
-      {{#each apps}}
-        <div class="app-item">
-          <p><strong>ID клиента:</strong> {{user_id}}</p>
-          <p><strong>Марка:</strong> {{car_brand}}, <strong>Модель:</strong> {{car_model}}</p>
-          <p><strong>Дата:</strong> {{date_test}}, <strong>Время:</strong> {{time_test}}</p>
-          <p><strong>Статус:</strong> {{status}}</p>
-
-          <form method="POST" action="/admin/update">
-            <input type="hidden" name="id" value="{{id}}">
-            <select name="status">
-              <option value="одобрено">Одобрено</option>
-              <option value="выполнено">Выполнено</option>
-              <option value="отклонено">Отклонено</option>
-            </select>
-            <input name="reason" placeholder="Причина отклонения">
-            <button type="submit">Обновить</button>
-          </form>
-        </div>
-      {{/each}}
+      <div class="row g-3">
+        {{#each apps}}
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="card h-100">
+              <div class="card-body">
+                <p><strong>ID клиента:</strong> {{user_id}}</p>
+                <p><strong>Марка:</strong> {{car_brand}}, <strong>Модель:</strong> {{car_model}}</p>
+                <p><strong>Дата:</strong> {{desired_date}}, <strong>Время:</strong> {{desired_time}}</p>
+                <p><strong>Статус:</strong> {{status}}</p>
+                <form method="POST" action="/admin/update" class="mt-2">
+                  <input type="hidden" name="id" value="{{id}}">
+                  <select class="form-select mb-2" name="status">
+                    <option value="одобрено">Одобрено</option>
+                    <option value="выполнено">Выполнено</option>
+                    <option value="отклонено">Отклонено</option>
+                  </select>
+                  <input class="form-control mb-2" name="reason" placeholder="Причина отклонения">
+                  <button class="btn btn-primary w-100" type="submit">Обновить</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
     {{else}}
       <p>Нет заявок.</p>
     {{/if}}
 
-    <div style="text-align: center; margin-top: 20px;">
-      <a href="/logout" class="btn">Выйти</a>
+    <div class="text-center mt-4">
+      <a href="/logout" class="btn btn-outline-secondary">Выйти</a>
     </div>
   </div>
 </body>
